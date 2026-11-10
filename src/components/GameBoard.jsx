@@ -42,11 +42,6 @@ const winningCombinations = [
   ...diagonalWins,
 ];
 
-function handleRestart() {
-  setBoard(gameBoard);
-  setCurrentPlayer("Aravind");
-}
-
 export default function GameBoard() {
   const [board, setBoard] = useState(gameBoard);
   const [currentPlayer, setCurrentPlayer] = useState("Aravind");
@@ -107,8 +102,9 @@ export default function GameBoard() {
             {cell.value}
           </button>
         ))}
-        <button onClick={handleRestart}>Restart Game</button>
+        
       </div>
+      <button onClick={handleRestart}>Restart Game</button>
     </>
   );
 }
