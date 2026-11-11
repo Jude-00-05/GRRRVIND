@@ -1,14 +1,629 @@
+
+/* RETRO ARCADE PLAYER SELECT */
+
+.setup-screen {
+  width: min(1000px, 94%);
+  margin: 45px auto;
+  padding: 30px;
+  text-align: center;
+  background: #100d20;
+  border: 4px solid #6d4bc3;
+  box-shadow:
+    0 0 0 5px #21183c,
+    0 0 30px #8055ff44;
+  position: relative;
+  overflow: hidden;
+}
+
+/* CRT scanline effect */
+.setup-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    #ffffff08 4px
+  );
+}
+
+.setup-screen > * {
+  position: relative;
+  z-index: 2;
+}
+
+.setup-heading {
+  color: #ffe66d;
+  font-family: "Courier New", monospace;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: 5px;
+  text-shadow: 4px 4px #9b4dca;
+  animation: arcadeBlink 1.5s infinite alternate;
+}
+
+.setup-subtitle {
+  color: #55f6e8;
+  font-family: monospace;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  margin-bottom: 40px;
+}
+
+/* Two character panels */
+.setup-players {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 25px;
+}
+
+.player-setup {
+  min-width: 0;
+  padding: 25px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  background: #21183c;
+  border: 4px solid #8b65dc;
+  box-shadow: 6px 6px 0 #090714;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.player-setup:nth-child(3) {
+  border-color: #ff5c8a;
+}
+
+.player-setup:hover {
+  transform: translateY(-6px);
+  box-shadow: 6px 12px 0 #090714;
+}
+
+.setup-player-label {
+  width: 100%;
+  padding: 10px;
+  background: #8b65dc;
+  color: #100d20;
+  font-family: monospace;
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+
+.player-setup:nth-child(3) .setup-player-label {
+  background: #ff5c8a;
+}
+
+/* Character portrait */
+.setup-avatar-container {
+  width: min(190px, 100%);
+  aspect-ratio: 1;
+  padding: 6px;
+  background: #090714;
+  border: 4px solid #55f6e8;
+  box-shadow: 0 0 0 4px #315f70;
+  overflow: hidden;
+}
+
+.setup-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+  transition: transform 0.3s ease;
+}
+
+.player-setup:hover .setup-avatar {
+  transform: scale(1.08);
+}
+
+.setup-input-label {
+  color: #ffe66d;
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.setup-name-input {
+  width: 100%;
+  padding: 14px 10px;
+  background: #090714;
+  color: #55f6e8;
+  border: 3px solid #6d4bc3;
+  outline: none;
+  font-family: monospace;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 0;
+}
+
+.setup-name-input:focus {
+  border-color: #ffe66d;
+  box-shadow: 0 0 12px #ffe66d66;
+}
+
+.setup-name-input::placeholder {
+  color: #77708e;
+}
+
+/* Upload character button */
+.hidden-file-input {
+  display: none;
+}
+
+.upload-button {
+  width: 100%;
+  padding: 12px 8px;
+  background: #39285e;
+  color: #55f6e8;
+  border: 2px solid #55f6e8;
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.upload-button:hover {
+  background: #55f6e8;
+  color: #100d20;
+  box-shadow: 0 0 15px #55f6e8;
+}
+
+.upload-button span {
+  font-size: 1.2rem;
+}
+
+/* VS */
+.setup-versus {
+  color: #ff5c8a;
+  font-family: monospace;
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-shadow: 3px 3px #7d2450;
+  animation: versusPulse 0.8s infinite alternate;
+}
+
+/* Start button */
+.start-game-button {
+  margin-top: 40px;
+  padding: 18px 45px;
+  background: #ffe66d;
+  color: #100d20;
+  border: 4px solid #fff4ae;
+  box-shadow: 6px 6px 0 #9b6725;
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.start-game-button:hover {
+  background: #55f6e8;
+  border-color: white;
+  transform: translateY(-4px);
+  box-shadow: 6px 10px 0 #247d85;
+}
+
+.start-game-button:active {
+  transform: translateY(3px);
+  box-shadow: 2px 2px 0 #247d85;
+}
+
+/* Animations */
+@keyframes arcadeBlink {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes versusPulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.15);
+  }
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .setup-screen {
+    padding: 20px 12px;
+    margin: 20px auto;
+  }
+
+  .setup-players {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .player-setup {
+    width: min(100%, 360px);
+    margin: auto;
+  }
+
+  .setup-versus {
+    font-size: 1.8rem;
+  }
+
+  .setup-avatar-container {
+    width: 150px;
+  }
+
+  .setup-heading {
+    letter-spacing: 2px;
+  }
+
+  .start-game-button {
+    width: 100%;
+  }
+}
+.setup-heading,
+.setup-player-label,
+.setup-versus,
+.start-game-button {
+  font-family: "Press Start 2P", monospace;
+}
+
+/* GAME SCREEN LAYOUT */
+.game-screen {
+  width: min(1200px, 95%);
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  align-items: start;
+  gap: 25px;
+}
+
+/* PLAYER CARDS */
+.player-card {
+  min-width: 0;
+  text-align: center;
+  padding: 15px;
+}
+
+/* PLAYER AVATARS — IMPORTANT */
+.player-image {
+  width: 140px;
+  height: 140px;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto 15px;
+}
+
+/* GAME BOARD AREA */
+.game-main {
+  min-width: 0;
+  text-align: center;
+}
+
 .game-board {
+  width: min(450px, 100%);
+  aspect-ratio: 1;
+  margin: 25px auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  width: 300px;
+  gap: 8px;
 }
 
 .cell {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  font-size: 2rem;
-  cursor: pointer;
+  min-width: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
 }
 
+/* IMAGES INSIDE BOARD CELLS */
+.cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+  .game-screen {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .game-main {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .player-image {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+/* ACTUAL PLAYER PORTRAITS */
+.game-player-image {
+  width: 140px;
+  height: 140px;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto 15px;
+}
+
+/* GAME LAYOUT */
+.game-screen {
+  width: min(1200px, 95%);
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  align-items: start;
+  gap: 25px;
+}
+
+.player-card {
+  min-width: 0;
+  text-align: center;
+  padding: 15px;
+}
+
+.game-main {
+  min-width: 0;
+  text-align: center;
+}
+
+/* TIC TAC TOE BOARD */
+.game-board {
+  width: min(450px, 100%);
+  aspect-ratio: 1;
+  margin: 25px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.cell {
+  min-width: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+  .game-screen {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .game-main {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .game-player-image {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+
+/* ===== ARCADE GAME OVER SCREEN ===== */
+
+.game-over {
+  width: min(700px, 92%);
+  margin: 50px auto;
+  padding: 45px 25px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  background: #100d20;
+  border: 3px solid #b56cff;
+  box-shadow:
+    0 0 10px #b56cff,
+    0 0 25px #8b45ff,
+    inset 0 0 30px #8b45ff33;
+
+  animation: screenAppear 0.7s ease-out both;
+}
+
+/* Moving neon background */
+.game-over::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    transparent,
+    #8b45ff44,
+    transparent,
+    #ff5c8a44,
+    transparent
+  );
+  animation: backgroundSpin 8s linear infinite;
+  pointer-events: none;
+}
+
+.game-over > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* GAME OVER TITLE */
+.game-over h1 {
+  color: #ff5c8a;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(1.3rem, 4vw, 2.2rem);
+  line-height: 1.6;
+  text-shadow:
+    0 0 5px #ff5c8a,
+    0 0 15px #ff5c8a,
+    0 0 30px #ff1744;
+
+  animation: titleFlicker 1.5s infinite alternate;
+}
+
+/* WINNER TEXT */
+.game-over h2 {
+  color: #ffe66d;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(0.9rem, 3vw, 1.4rem);
+  line-height: 1.8;
+  margin: 25px 0;
+  text-shadow: 0 0 12px #ffe66d;
+  animation: winnerText 1s ease-in-out infinite alternate;
+}
+
+.game-over p {
+  color: #55f6e8;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px #55f6e8;
+}
+
+/* WINNER PORTRAIT */
+.winner-image {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #ffe66d;
+
+  box-shadow:
+    0 0 10px #ffe66d,
+    0 0 25px #ff9d00,
+    0 0 50px #ff5c8a;
+
+  animation:
+    winnerEntrance 0.9s ease-out both,
+    winnerGlow 1.5s ease-in-out 0.9s infinite alternate;
+}
+
+/* BUTTONS */
+.game-over button {
+  margin: 15px 8px 0;
+  padding: 14px 22px;
+
+  background: #39285e;
+  color: #55f6e8;
+  border: 2px solid #55f6e8;
+
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.65rem;
+  line-height: 1.8;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.game-over button:hover {
+  background: #55f6e8;
+  color: #100d20;
+  box-shadow: 0 0 10px #55f6e8, 0 0 25px #55f6e8;
+  transform: translateY(-4px);
+}
+
+/* ANIMATIONS */
+@keyframes screenAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes backgroundSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes titleFlicker {
+  from {
+    opacity: 0.8;
+    text-shadow: 0 0 5px #ff5c8a;
+  }
+  to {
+    opacity: 1;
+    text-shadow: 0 0 15px #ff5c8a, 0 0 35px #ff1744;
+  }
+}
+
+@keyframes winnerText {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes winnerEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(-180deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes winnerGlow {
+  from {
+    box-shadow: 0 0 10px #ffe66d, 0 0 20px #ff9d00;
+  }
+  to {
+    box-shadow: 0 0 25px #ffe66d, 0 0 55px #ff5c8a;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .game-over {
+    padding: 30px 15px;
+    margin: 25px auto;
+  }
+
+  .winner-image {
+    width: 140px;
+    height: 140px;
+  }
+
+  .game-over button {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .game-over,
+  .game-over::before,
+  .game-over h1,
+  .game-over h2,
+  .winner-image {
+    animation: none;
+  }
+}

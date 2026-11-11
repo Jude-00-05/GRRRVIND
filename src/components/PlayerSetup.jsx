@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
-export default function PlayerSetup({ playerNumber }) {
-  const [image, setImage] = useState(null);
 
+import { useState, useEffect } from "react";
+
+export default function PlayerSetup({
+  playerNumber,
+  playerName,
+  setPlayerName,
+  image,
+  setImage,
+}) {
   const [imageURL, setImageURL] = useState(null);
 
   useEffect(() => {
@@ -10,26 +16,65 @@ export default function PlayerSetup({ playerNumber }) {
       return;
     }
 
+    if (typeof image === "string") {
+      setImageURL(image);
+      return;
+    }
+
     const url = URL.createObjectURL(image);
     setImageURL(url);
 
-    return () => {
-      URL.revokeObjectURL(url);
-    };
+    return () => URL.revokeObjectURL(url);
   }, [image]);
+
+  const inputId = `player-image-${playerNumber}`;
+
   return (
-    <>
-      <p>Player {playerNumber}</p>
+    <div className="player-setup">
+      <div className="setup-player-label">
+        PLAYER 0{playerNumber}
+      </div>
+
+      <div className="setup-avatar-container">
+        {imageURL ? (
+          <img
+            src={imageURL}
+            alt={`${playerName}'s avatar`}
+            className="setup-avatar"
+          />
+        ) : (
+          <div className="avatar-placeholder">?</div>
+        )}
+      </div>
+
+      <label className="setup-input-label">
+        CHARACTER NAME
+      </label>
 
       <input
-        onChange={(e) => setImage(e.target.files[0])}
-        type="file"
-        accept="image/*"
+        className="setup-name-input"
+        type="text"
+        value={playerName}
+        onChange={(e) => setPlayerName(e.target.value)}
+        placeholder="Enter your name"
+        maxLength={18}
       />
 
-      {imageURL && (
-        <img src={imageURL} alt={`Player ${playerNumber}`} width="150" />
-      )}
-    </>
+      <input
+        id={inputId}
+        className="hidden-file-input"
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          if (e.target.files[0]) {
+            setImage(e.target.files[0]);
+          }
+        }}
+      />
+
+      <label htmlFor={inputId} className="upload-button">
+        <span>+</span> CHANGE AVATAR
+      </label>
+    </div>
   );
 }
